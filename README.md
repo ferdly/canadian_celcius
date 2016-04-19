@@ -1,4 +1,3 @@
-<<<<<<< 194eab89e14f1ba8748713c1bdbbf0a6f00d06b5
 # canadian_celcius
 Demo of Multi-Step Node Entry Celcius to Fahrenheit Gizmo for Canadian(role) Users
 =======
