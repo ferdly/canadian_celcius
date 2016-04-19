@@ -1,0 +1,49 @@
+#NOTES:
+#\_ purposely obliterated naming conventions throughout
+
+1. Click 'Degree Wizard'
+-> by menu item it calls 'drupal_get_form' with the parameter 'degree_wizard_fozrm' from dot-module
+
+2. drupal_get_form('degree_wizard_fozrm') is called. This creates $form_state, assigns first parameter ('degree_wizard_fozrm') to $form_id and adds any additional arguments to $form_state['build_info']['args'] as array of remaining args. Which in turn calls drupal_build_form($form_id, $form_state).
+
+3. drupal_build_form('degree_wizard_fozrm') is called.
+3.a. += form_state_defaults()// UNION, meaning create if not exists from function return
+3.b. assign the $form_state input from the 'method' super global (usually the entire  $_POST array, if not 'get')
+#IF $_SESSION['batch_form_state'] 
+#\_ This is about 'batch processing'
+3.c.1. make IT $form_state
+return drupal_rebuild_form($form_id, $form_state)
+#END_IF
+
+#IF $check_cache (see calculation)
+3.c.2. form_get_cach()
+#-> NOT RETURN! BUT! $form is unset, hence 
+#END IF
+
+#IF !isset($form)
+3.c.3. 'Build the form from scratch'
+##IF $check_cache THEN stash the current $form_state 
+  \_(I guess it is possible for 3.c.2 to run and return empty)
+##END_IF
+$form = drupal_retrieve_form($form_id, $form_state)
+drupal_prepare_form($form_id, $form, $form_state)
+##IF $check_cache THEN stash the current $form_state 
+  \_ dig back here, get $form_state stuff from stashed above
+##END_IF
+3.d drupal_process_form($form_id, $form, $form_state)
+\_ "This function is the heart of form API. The form gets built, validated and in appropriate cases, submitted and rebuilt."
+3.e return $form
+
+
+#SEPARATE OUT drupal_process_form() below as "4"
+4.a. build if $_GET and 'always_process' (for REST)
+4.b. cow-catch $form_state['input']['form_id']
+4.c. cow-catch $form_state['input']['token']
+4.d. stash $form as $unprocessed_form
+4.e. $form = form_builder($form_id, $form, $form_state)
+\_ "Builds and processes all elements in the structured form array."
+#IF $form_state['process_input']
+ drupal_validate_form($form_id, $form, $form_state)
+## __CIRCLEBACK__ dig in here!
+#END IF
+

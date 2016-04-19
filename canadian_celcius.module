@@ -1,0 +1,101 @@
+<?php
+
+module_load_include('inc', 'canadian_celcius', 'includes/canadian_celcius.navigation');
+module_load_include('inc', 'canadian_celcius', 'includes/canadian_celcius.validate');
+module_load_include('inc', 'canadian_celcius', 'includes/canadian_celcius.submit');
+
+/**
+  Implements hook_form_FORM_ID_alter
+*/
+function canadian_celcius_form_temp_reading_node_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+ /*<KLUDGE PARSE>*/
+ $q = $_GET['q'];
+ dpm($q, '$q');
+ $q_array = explode('/', $q);
+ dpm($q_array, '$q_array');
+ $fahrenheit_temp = '';
+ $fnext = FALSE;
+ foreach ($q_array as $index => $value) {
+   if ($fnext) {
+     $fahrenheit_temp = $value;
+   }
+   if ($value == 'ftemp') {
+     $fnext = TRUE;
+   }
+ }
+ /*</KLUDGE PARSE>*/
+ $canadian = in_array('Canadian', $user->roles);
+
+ $not = $canadian ? '' : ' NOT';
+ $message_canadian = $user->name . ' is' . $not . ' a Candaian.';
+ $message_action = ' Do' . $not . ' redirect for Celcius Temperature Entry.';
+ $message_action = strlen($fahrenheit_temp) == 0 ? $message_action : ' Returning from redirect to Celcius Temperature Entry.';
+ $message = $message_canadian . $message_action;
+ drupal_set_message($message);
+ // $fahrenheit_temp = @$form_state['multistep_values']['fahrenheit_temp']['fahrenheit_temp'];
+ $message_which[] = 'Fahrenheit Entry Normal.';
+ $message_which[] = 'Fahrenheit Entry will have Value set to ' . $fahrenheit_temp . ' and set to Read-Only.';
+ $index = strlen($fahrenheit_temp) == 0 ? 0 : 1;
+ // dpm(array(), $message_which[$index]);
+ drupal_set_message($message_which[$index]);
+ if (strlen($fahrenheit_temp) > 0) {
+    $lang = $form['field_temperature']['#language'];
+    // $form['field_temperature'][$lang][0]['value']['#disabled'] = TRUE;
+    $form['field_temperature'][$lang][0]['value']['#attributes']['readonly'] = 'readonly';
+   // $form['field_temperature']['#default_value'] = $fahrenheit_temp;
+   $form['field_temperature'][$lang][0]['value']['#default_value'] = $fahrenheit_temp;
+   // $form_state['field']['field_temperature']['#default_value'] = $fahrenheit_temp;
+ }elseif($canadian){
+  drupal_goto('canadian-celcius');
+ }
+ dpm($form, '$form');
+ drupal_set_message('THIS! - ' . $form_id);
+ dpm($form_state, '$form_state');
+}
+
+/**
+ * Implements hook_menu().
+ */
+function canadian_celcius_menu() {
+
+  $items = array();
+  $items['canadian-celcius'] = array(
+    'title' => 'Canadian Celcius',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('canadian_celcius_fozrm'),
+    'access arguments' => array('access content'),
+    'file' => 'includes/canadian_celcius.form.inc',
+    // 'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['complete-page'] = array(
+    'title' => 'Canadian Complete',
+    'page callback' => 'canadian_celcius_complete',
+    'page arguments' => array(),
+    'access arguments' => array('access content'),
+    // 'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+
+/*
+ * Implements hook_mail().
+ */
+function canadian_celcius_mail($key, &$message, $params) {
+
+  if (isset($params['subject'])) {
+    $message['subject'] = $params['subject'];
+  }
+  if (isset($params['body'])) {
+    $message['body'][] = $params['body'];
+  }
+  if (isset($params['headers']) && is_array($params['headers'])) {
+    $message['headers'] += $params['headers'];
+  }
+
+}

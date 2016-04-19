@@ -1,0 +1,4 @@
+name = Canadian Celcius
+description = Multistep canadian celcius form
+core = 7.x
+package = QIQgroup Tools
