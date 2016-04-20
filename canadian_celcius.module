@@ -11,9 +11,7 @@ function canadian_celcius_form_temp_reading_node_form_alter(&$form, &$form_state
   global $user;
  /*<KLUDGE PARSE>*/
  $q = $_GET['q'];
- dpm($q, '$q');
  $q_array = explode('/', $q);
- dpm($q_array, '$q_array');
  $fahrenheit_temp = '';
  $fnext = FALSE;
  foreach ($q_array as $index => $value) {
