@@ -20,7 +20,6 @@ function canadian_celcius_fozrm_suzbmit($form, &$form_state) {
 
   switch ($form_state['stanza']) {
 
-    // case 'personal_details':
     case 'fahrenheit_temp':
       $form_state['multistep_values'][$form_state['stanza']] = $form_state['values'];
       if ($form_state['triggering_element']['#value'] != 'Back') {
@@ -37,7 +36,6 @@ function canadian_celcius_fozrm_suzbmit($form, &$form_state) {
   }
 
   if (isset($form_state['complete'])){
-    // drupal_goto('complete-page');
     $fahrenheit_temp = $form_state['multistep_values']['fahrenheit_temp']['fahrenheit_temp'];
     dpm($fahrenheit_temp, '$fahrenheit_temp');
 

@@ -1,4 +1,5 @@
 name = Canadian Celcius
 description = Multistep canadian celcius form
+dependencies[] = devel
 core = 7.x
 package = QIQgroup Tools

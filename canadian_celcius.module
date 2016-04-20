@@ -27,25 +27,20 @@ function canadian_celcius_form_temp_reading_node_form_alter(&$form, &$form_state
  /*</KLUDGE PARSE>*/
  $canadian = in_array('Canadian', $user->roles);
 
- $not = $canadian ? '' : ' NOT';
- $message_canadian = $user->name . ' is' . $not . ' a Candaian.';
- $message_action = ' Do' . $not . ' redirect for Celcius Temperature Entry.';
+ $not_string = $canadian ? '' : ' NOT';
+ $message_canadian = $user->name . ' is' . $not_string . ' a Candaian.';
+ $message_action = ' Do' . $not_string . ' redirect for Celcius Temperature Entry.';
  $message_action = strlen($fahrenheit_temp) == 0 ? $message_action : ' Returning from redirect to Celcius Temperature Entry.';
  $message = $message_canadian . $message_action;
  drupal_set_message($message);
- // $fahrenheit_temp = @$form_state['multistep_values']['fahrenheit_temp']['fahrenheit_temp'];
  $message_which[] = 'Fahrenheit Entry Normal.';
  $message_which[] = 'Fahrenheit Entry will have Value set to ' . $fahrenheit_temp . ' and set to Read-Only.';
  $index = strlen($fahrenheit_temp) == 0 ? 0 : 1;
- // dpm(array(), $message_which[$index]);
  drupal_set_message($message_which[$index]);
  if (strlen($fahrenheit_temp) > 0) {
     $lang = $form['field_temperature']['#language'];
-    // $form['field_temperature'][$lang][0]['value']['#disabled'] = TRUE;
     $form['field_temperature'][$lang][0]['value']['#attributes']['readonly'] = 'readonly';
-   // $form['field_temperature']['#default_value'] = $fahrenheit_temp;
    $form['field_temperature'][$lang][0]['value']['#default_value'] = $fahrenheit_temp;
-   // $form_state['field']['field_temperature']['#default_value'] = $fahrenheit_temp;
  }elseif($canadian){
   drupal_goto('canadian-celcius');
  }
@@ -66,7 +61,6 @@ function canadian_celcius_menu() {
     'page arguments' => array('canadian_celcius_fozrm'),
     'access arguments' => array('access content'),
     'file' => 'includes/canadian_celcius.form.inc',
-    // 'type' => MENU_NORMAL_ITEM,
     'type' => MENU_CALLBACK,
   );
 
@@ -75,7 +69,6 @@ function canadian_celcius_menu() {
     'page callback' => 'canadian_celcius_complete',
     'page arguments' => array(),
     'access arguments' => array('access content'),
-    // 'type' => MENU_NORMAL_ITEM,
     'type' => MENU_CALLBACK,
   );
 

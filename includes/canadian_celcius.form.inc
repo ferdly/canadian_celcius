@@ -25,8 +25,6 @@ function canadian_celcius_fozrm($form, &$form_state) {
   $form = array();
 
   $form['#submit'][] = 'canadian_celcius_fozrm_suzbmit';
-  // dpm($form, $form_state['build_info']['form_id']);
-  // dpm($form_state, '$form_state');
   switch ($form_state['stanza']) {
 
     case 'celcius_temp':
@@ -67,7 +65,7 @@ function canadian_celcius_gather_celcius($form, &$form_state) {
     '#size' => '4',
     '#title' => 'Enter the Temperature in Degrees Celcius',
     '#default_value' => isset($values['celcius_temp']) ? $values['celcius_temp'] : '15',
-    '#suffix' => " C Suffix",
+    '#suffix' => '&deg; C',
   );
 
   $form['next'] = array(
@@ -102,7 +100,7 @@ function canadian_celcius_gather_fahrenheit_temp($form, &$form_state) {
     '#size' => '4',
     '#title' => $title,
     '#default_value' => $fahrenheit_temp,
-    '#suffix' => " &deg; F",
+    '#suffix' => '&deg; F',
   );
 
   $form['back'] = array(
@@ -167,6 +165,7 @@ function canadian_celcius_converter($celcius_temp) {
   $fahrenheit_temp = $fahrenheit_temp * 9;
   $fahrenheit_temp = $fahrenheit_temp / 5;
   $fahrenheit_temp += 32;
+  $fahrenheit_temp = round($fahrenheit_temp, 2);
   return $fahrenheit_temp;
 
 }
