@@ -37,7 +37,6 @@ function canadian_celcius_fozrm_suzbmit($form, &$form_state) {
 
   if (isset($form_state['complete'])){
     $fahrenheit_temp = $form_state['multistep_values']['fahrenheit_temp']['fahrenheit_temp'];
-    dpm($fahrenheit_temp, '$fahrenheit_temp');
 
     drupal_goto('node/add/temp-reading/ftemp/' . $fahrenheit_temp);
   }
@@ -64,9 +63,7 @@ function canadian_celcius_fozrm_suzbmit($form, &$form_state) {
   * @param type $form_state
   */
 function canadian_celcius_faux_finish($form, &$form_state) {
-  // dpm($form_state, '$form_state');
   $multistep_values = $form_state['multistep_values'];
-  dpm($multistep_values, '$multistep_values');
   $fahrenheit_temp = $multistep_values['fahrenheit_temp']['fahrenheit_temp'];
 
   $module = 'canadian_celcius';

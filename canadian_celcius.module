@@ -44,9 +44,7 @@ function canadian_celcius_form_temp_reading_node_form_alter(&$form, &$form_state
  }elseif($canadian){
   drupal_goto('canadian-celcius');
  }
- dpm($form, '$form');
  drupal_set_message('THIS! - ' . $form_id);
- dpm($form_state, '$form_state');
 }
 
 /**

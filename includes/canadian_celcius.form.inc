@@ -73,8 +73,6 @@ function canadian_celcius_gather_celcius($form, &$form_state) {
     '#value' => t('Next')
   );
 
-dpm($form, $form_state['build_info']['form_id']);
-dpm($form_state, '$form_state');
 return $form;
 }
 
@@ -113,8 +111,6 @@ function canadian_celcius_gather_fahrenheit_temp($form, &$form_state) {
     '#value' => t('Next')
   );
 
-  dpm($form, $form_state['build_info']['form_id']);
-  dpm($form_state, '$form_state');
   return $form;
 }
 
